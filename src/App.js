@@ -1,25 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import Book from "./Book";
 
-function App() {
+
+function BooksList() {
+  const [books, setBooks] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("https://www.googleapis.com/books/v1/volumes/?q=pushkin")
+      .then(res => {
+        setBooks(res.data['items']);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, []);
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+      <Book books={books} />
+  )
 }
 
-export default App;
+export default BooksList;
